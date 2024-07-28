@@ -11,31 +11,36 @@
 #define STDERR 2
 
 // Function to check if a path is a directory
-int isDirectory(char *path) {
-    struct stat statbuf;
-    if (stat(path, &statbuf) != 0) {
-        return 0; // Error or path does not exist
+ int checkPath( char *path) {
+    struct stat path_stat;
+    if (stat(path, &path_stat) != 0) {
+        printf("Not a valid path\n");
+        return 0;
     }
-    return S_ISDIR(statbuf.st_mode);
-}
+    if (S_ISDIR(path_stat.st_mode)) {
+       // printf("Directory\n");
+return 1;
 
-// Function to check if a path is a file
-int isFile(const char *path) {
-    struct stat statbuf;
-    if (stat(path, &statbuf) != 0) {
-        return 0; // Error or path does not exist
+    } else if (S_ISREG(path_stat.st_mode)) {
+        //printf("File\n");
+return 2;
+    } else {
+        printf("Not a valid path\n");
     }
-    return S_ISREG(statbuf.st_mode);
 }
 
 // Function to handle the cp command
 void cp_command(char *source_path, char *target_path) {
     char buffer[1024];
 
-    if (isDirectory(target_path)) {
+    
+if(checkPath(target_path)==1)
+{
+
         char *fileName = basename(source_path);
         strcat(target_path, "/");
         strcat(target_path, fileName);
+}
 
         FILE *sourceFile = fopen(source_path, "rb");
         if (sourceFile == NULL) {
@@ -57,15 +62,19 @@ void cp_command(char *source_path, char *target_path) {
                 fclose(sourceFile);
                 fclose(targetFile);
                 return;
-            }
-        }
+            
+        
 
         fclose(sourceFile);
         fclose(targetFile);
-    } else {
+            }
+     else {
         fprintf(stderr, "Target path is not a directory\n");
     }
+        }
 }
+
+
 
 // Function to print supported commands
 void supported_commands() {
@@ -82,7 +91,7 @@ int main(int argc, char *argv[]) {
     while (1) {
         ssize_t readSize = 0;
         char command[100];
-        char *shellMsg = "Ana Gahez ya Basha";
+        char *shellMsg = "Ana Gahez ya Basha ";
         int wordcount = 1;
 
         // Prompt for user input
