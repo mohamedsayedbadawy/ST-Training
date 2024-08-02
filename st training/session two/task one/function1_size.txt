@@ -1,2 +1,0 @@
-   text	   data	    bss	    dec	    hex	filename
-    284	      0	      0	    284	    11c	function1.o

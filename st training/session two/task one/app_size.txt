@@ -1,2 +1,0 @@
-   text	   data	    bss	    dec	    hex	filename
-    294	      4	      4	    302	    12e	app.o
