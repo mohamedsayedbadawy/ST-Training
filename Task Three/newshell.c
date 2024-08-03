@@ -79,7 +79,7 @@ int main() {
                     type_command(operands[1]);
                 }
             } else {
-                external_command(operands);
+                external_command(operands,operandCounter);
 	
             }
         }
