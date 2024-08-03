@@ -152,22 +152,40 @@ void type_command(char *command_name) {
 
 
 // Function to execute external command
-void external_command(char **ex_command) {
-    int forkid = fork(); // Create child process using fork
-   
-if (forkid==0)
-  { 
+void external_command(char **ex_command,int counter) {
+     
+  
 
+  char **copy_arg=malloc(counter*sizeof( char *));
+        //copy arguments  to another  array to avoid overwrite
 
-     execvp(ex_command[0],ex_command);
-exit(EXIT_FAILURE);
+          for (int i=0;i<counter;i++)
+{
+copy_arg[i]=malloc((strlen(ex_command[i])+1)*sizeof(char));
+strcpy(copy_arg[i],ex_command[i]); // copy arguments in another array  to avoid overwrite 
 }
+    
+    int forkid = fork(); // Create child process using fork
 
+if (forkid==0)
+  {
+
+
+     execvp(copy_arg[0],copy_arg);
+exit(EXIT_FAILURE);
+perror("fail in execvp process");
+  }
 if(forkid>0)
 {
 int satuts=0;
 int childid =wait(&satuts);
+} 
+// free dynamic allocation of copied array 
+          for (int i=0;i<counter;i++)
+{
+free(copy_arg[i]);
 }
+free(copy_arg);
 return ;
 }
 
@@ -186,7 +204,7 @@ int parse_input(char *shellMsg, char *command, char ***operands) {
     command[readSize - 1] = '\0'; // Null-terminate the command string
 
     // Allocate memory for the array of operands
-    *operands = malloc(1024 * sizeof(char *));
+    *operands = malloc(1024 * sizeof(char * ));
     if (*operands == NULL) {
         perror("Memory allocation failed");
         exit(1);
