@@ -3,7 +3,7 @@
 extern char **environ ;
 void env_command(char ** env_variable);
 void cp_command(char *source_path, char *target_path);
-void external_command(char **ex_command);
+void external_command(char **ex_command,int counter);
 
 void mv_command(char *source_path, char *target_path);
 void cd_command(char *path);
